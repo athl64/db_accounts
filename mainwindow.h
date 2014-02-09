@@ -22,9 +22,25 @@ public:
 
 public slots:
     int simpleRead();
+    void log();
 
 private:
     Ui::MainWindow *ui;
+
+private:
+    QString hostname;
+    QString dbAlias;
+    QString login;
+    QString password;
+    qint16 port;
+    QVector<int> list;
+
+    //test below
+    struct pair {
+        qint16 id;
+        QString title;
+    };
+    QVector< pair > vect;
 };
 
 #endif // MAINWINDOW_H
