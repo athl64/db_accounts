@@ -20,7 +20,7 @@ int MainWindow::simpleRead() {
     hostname = "localhost";
     port = 3306;
     login = "root";
-    password = "password";
+    password = "tbls8541";
     dbAlias = "qtTest";
     //-----------------------
     int i = 0;
@@ -43,8 +43,8 @@ int MainWindow::simpleRead() {
     query->exec("select ID, Title from contacts");
     while(query->next()) {
         this->ui->listWidget->insertItem(i,query->value(1).toString());
-        list.append(query->value(0).toInt());
-        vect.append({query->value(0).toInt(),query->value(1).toString()});
+        //list.append(query->value(0).toInt());
+        vect.append({i,query->value(0).toInt(),query->value(1).toString()});
         i++;
     }
 
@@ -53,10 +53,17 @@ int MainWindow::simpleRead() {
 }
 
 void MainWindow::log() {
+    int index = 0;
     //return text of selected item in list
     ui->listWidget->selectedItems()[0]->text();
-    for(int y=0;y<vect.count();y++) {
+    //return index of selected item in list
+    index = ui->listWidget->currentRow();
+
+    /*for(int y=0;y<vect.count();y++) {
         ui->textEdit->append(QString::number(vect[y].id));
         ui->textEdit->append(vect[y].title);
-    }
+    }*/
+
+    ui->lineEdit->setText(vect[index].title);
+    //place for request to DB with another info by ID
 }

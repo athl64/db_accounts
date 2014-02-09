@@ -33,10 +33,13 @@ private:
     QString login;
     QString password;
     qint16 port;
-    QVector<int> list;
+    //QVector<int> list;
 
-    //test below
+    //@i = number in QListTable
+    //@id = ID in table contacts
+    //@title = Title in table contacts
     struct pair {
+        qint16 i;
         qint16 id;
         QString title;
     };
