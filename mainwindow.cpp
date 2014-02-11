@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(simpleRead()));
+    connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(cl()));
     connect( ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(log()) );
 }
 
@@ -66,4 +67,18 @@ void MainWindow::log() {
 
     ui->lineEdit->setText(vect[index].title);
     //place for request to DB with another info by ID
+}
+
+int MainWindow::cl() {
+    dbAccess conn;
+    conn.initialize("localhost",3306,"qtTest","root","tbls8541");
+    conn.dbOpen();
+    QList<QString> response = conn.getTitle();
+    int i = response.size();
+    for(int ii = 0; ii < i; ii++) {
+        ui->textEdit->append(response[ii]);
+    }
+    QList<base> body = conn.getBody();
+    conn.dbClose();
+    return 1;
 }

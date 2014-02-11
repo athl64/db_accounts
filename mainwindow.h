@@ -7,6 +7,7 @@
 #include <QtSql/QSqlQuery>
 #include <QDebug>
 #include <QSqlError>
+#include "dbaccess.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,6 +24,7 @@ public:
 public slots:
     int simpleRead();
     void log();
+    int cl();
 
 private:
     Ui::MainWindow *ui;
