@@ -59,14 +59,6 @@ void MainWindow::log() {
     ui->listWidget->selectedItems()[0]->text();
     //return index of selected item in list
     index = ui->listWidget->currentRow();
-
-    /*for(int y=0;y<vect.count();y++) {
-        ui->textEdit->append(QString::number(vect[y].id));
-        ui->textEdit->append(vect[y].title);
-    }*/
-
-    ui->lineEdit->setText(vect[index].title);
-    //place for request to DB with another info by ID
 }
 
 int MainWindow::cl() {

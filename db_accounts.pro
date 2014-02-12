@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    dbaccess.cpp
+    dbaccess.cpp \
+    netaccess.cpp
 
 HEADERS  += mainwindow.h \
     dbaccess.h \
-    baseStruct.h
+    baseStruct.h \
+    netaccess.h
 
 FORMS    += mainwindow.ui

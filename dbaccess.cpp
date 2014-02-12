@@ -85,3 +85,7 @@ QList<base> dbAccess::getBody() {
         qDebug() << "Database doesn't open";
     }
 }
+
+int dbAccess::addNewContact(int id, QString title, QString attr, QString changed, QString dateAdded, QString dateModifoed) {
+
+}
