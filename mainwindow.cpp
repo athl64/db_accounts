@@ -8,11 +8,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(simpleRead()));
     connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(cl()));
-    connect( ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(log()) );
+    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(log()));
+    connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(addnew()));
+
+    conn.initialize("localhost",3306,"qtTest","root","tbls8541");
+    conn.dbOpen();
 }
 
 MainWindow::~MainWindow()
 {
+    conn.dbClose();
     delete ui;
 }
 
@@ -20,8 +25,8 @@ int MainWindow::simpleRead() {
     //-----------------------
     hostname = "localhost";
     port = 3306;
-    login = "root";
-    password = "tbls8541";
+    login = "login";
+    password = "password";
     dbAlias = "qtTest";
     //-----------------------
     int i = 0;
@@ -62,15 +67,20 @@ void MainWindow::log() {
 }
 
 int MainWindow::cl() {
-    dbAccess conn;
-    conn.initialize("localhost",3306,"qtTest","root","tbls8541");
-    conn.dbOpen();
+    //dbAccess conn;
+//    conn.initialize("localhost",3306,"qtTest","root","tbls8541");
+//    conn.dbOpen();
     QList<QString> response = conn.getTitle();
     int i = response.size();
     for(int ii = 0; ii < i; ii++) {
         ui->textEdit->append(response[ii]);
     }
     QList<base> body = conn.getBody();
-    conn.dbClose();
+//    conn.dbClose();
+    return 1;
+}
+
+int MainWindow::addnew() {
+    conn.addNewContact("0", "hello", "good title", "some changed text", "NOW()", "NOW()");
     return 1;
 }

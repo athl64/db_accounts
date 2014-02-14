@@ -21,6 +21,9 @@ int dbAccess::initialize(QString hostname, quint16 port, QString dbAlias, QStrin
     db.setUserName(login);
     db.setPassword(password);
     dbStatus = false;
+    if(db.isOpenError()) {
+        qDebug() << db.lastError() ;
+    }
     return 1;
 }
 
@@ -28,6 +31,7 @@ int dbAccess::dbOpen()
 {
     if(db.open()) {
         dbStatus = true;
+        qDebug() << "connected";
         return 1;
     } else {
         qDebug() << db.lastError();
@@ -40,6 +44,7 @@ int dbAccess::dbClose()
 {
     db.close();
     dbStatus = false;
+    qDebug() << "disconnected";
     return 1;
 }
 
@@ -69,7 +74,7 @@ QList<base> dbAccess::getBody() {
             modified = "";
     if(dbStatus) {
         request = QSqlQuery(db);
-        request.exec("select ID, Title, Attributes, changedFiles, dateAdded, dateModified from contacts");
+        request.exec("select ID, Title, Attributes, changedFiles, dateAdded, dateModified from contacts limit = 100");
         while(request.next()) {
             id = request.value(0).toInt();
             title = request.value(1).toString();
@@ -86,6 +91,18 @@ QList<base> dbAccess::getBody() {
     }
 }
 
-int dbAccess::addNewContact(int id, QString title, QString attr, QString changed, QString dateAdded, QString dateModifoed) {
-
+int dbAccess::addNewContact(QString id, QString title, QString attr, QString changed, QString dateAdded, QString dateModifoed) {
+    if(dbStatus) {
+        request = QSqlQuery(db);
+        int idNum = 0;
+        QString idStr = "";
+        if( (idNum = id.toInt()) >= 0) {
+            idStr = id;
+        }
+        idStr = "";//temp for debug
+        QString strVariables = "\"" + idStr + "\",\"" + title + "\",\"" + attr + "\",\"" + changed + "\",\"" + dateAdded + "\",\"" + dateModifoed + "\"";
+        request.exec("insert into contacts (ID,Title, Attributes, changedFiles, dateAdded, dateModified) values(" + strVariables + ")");
+        qDebug() << "error while insert" << db.lastError();
+        return 1;
+    }
 }

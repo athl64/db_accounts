@@ -25,6 +25,7 @@ public slots:
     int simpleRead();
     void log();
     int cl();
+    int addnew();
 
 private:
     Ui::MainWindow *ui;
@@ -46,6 +47,7 @@ private:
         QString title;
     };
     QVector< pair > vect;
+    dbAccess conn;
 };
 
 #endif // MAINWINDOW_H
