@@ -33,7 +33,7 @@ private:
 
 private:
     dbAccess conn;
-    key TID;
+    //key TID;
     QList<key> Storage;
 };
 

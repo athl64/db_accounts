@@ -33,6 +33,7 @@ void MainWindow::log() {
 
 int MainWindow::getTitles() {
     ui->listWidget->clear();
+    Storage.clear();//fucking memory eater
     QList<key> response = conn.getTitleID();
     int i = response.size();
     for(int ii = 0; ii < i; ii++) {
