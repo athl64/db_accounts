@@ -64,6 +64,20 @@ QList<QString> dbAccess::getTitle()
     }
 }
 
+QList<key> dbAccess::getTitleID() {
+    QList<key> result;
+    if(dbStatus) {
+        request = QSqlQuery(db);
+        request.exec("select ID, Title from contacts Order by Title ASC");
+        while(request.next()) {
+            result.append({request.value(0).toInt(),request.value(1).toString()});
+        }
+        return result;
+    } else {
+        qDebug() << "Database doesn't open";
+    }
+}
+
 QList<base> dbAccess::getBody() {
     QList<base> result;
     int id = 0;

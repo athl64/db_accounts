@@ -12,4 +12,9 @@ struct base {
     QString DateModified;
 };
 
+struct key {
+    int ID;
+    QString Title;
+};
+
 #endif // BASESTRUCT_H

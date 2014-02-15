@@ -33,6 +33,8 @@ private:
 
 private:
     dbAccess conn;
+    key TID;
+    QList<key> Storage;
 };
 
 #endif // MAINWINDOW_H

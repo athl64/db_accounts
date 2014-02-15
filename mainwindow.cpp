@@ -33,10 +33,11 @@ void MainWindow::log() {
 
 int MainWindow::getTitles() {
     ui->listWidget->clear();
-    QList<QString> response = conn.getTitle();
+    QList<key> response = conn.getTitleID();
     int i = response.size();
     for(int ii = 0; ii < i; ii++) {
-        ui->listWidget->addItem(response[ii]);
+        ui->listWidget->addItem(response.value(ii).Title);
+        Storage.append({response.value(ii).ID, response.value(ii).Title});
     }
     ui->label->setText("total: " + QString::number(i) + " items");
     ui->statusBar->showMessage("List refreshed.",5000);
@@ -45,12 +46,14 @@ int MainWindow::getTitles() {
 
 int MainWindow::getQuery() {
     QList<base> result;
-    int id;//this is id of list, not ID in table
-    id = ui->listWidget->currentRow();
+    int id = 0, listID = 0;//this is id of list, not ID in table
+    listID = ui->listWidget->currentRow();
+    id = Storage.value(listID).ID;
     result = conn.getBodyByID(id);
     ui->lineEdit->setText(result.value(0).Title);
     ui->textEdit->setText(result.value(0).Additional);
     ui->textEdit_2->setText(result.value(0).ChangedFiles);
+    return 1;
 }
 
 int MainWindow::addnew() {

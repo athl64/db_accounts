@@ -31,6 +31,7 @@ public:
     int dbOpen();
     int dbClose();
     QList<QString> getTitle();
+    QList<key> getTitleID();
     QList<base> getBody();
     QList<base> getBodyByID(int id);
     int addNewContact(QString id, QString title, QString attr, QString changed);
