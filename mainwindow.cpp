@@ -1,15 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QtConcurrent/QtConcurrent>
+#include <QFuture>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(simpleRead()));
-    connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(cl()));
-    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(log()));
-    connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(addnew()));
+    connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(getTitles()));
+    connect(ui->pushButton_3,SIGNAL(clicked()),this,SLOT(addnew()));
+    connect(ui->listWidget,SIGNAL(itemSelectionChanged()),this,SLOT(getQuery()));
 
     conn.initialize("localhost",3306,"qtTest","root","tbls8541");
     conn.dbOpen();
@@ -21,43 +22,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-int MainWindow::simpleRead() {
-    //-----------------------
-    hostname = "localhost";
-    port = 3306;
-    login = "login";
-    password = "password";
-    dbAlias = "qtTest";
-    //-----------------------
-    int i = 0;
-    QSqlDatabase myDB = QSqlDatabase::addDatabase("QODBC");
-    myDB.setHostName(hostname);
-    myDB.setPort(port);
-    //DatabaseName for ODBC = name of DSN for DB in confugure window in control panel
-    myDB.setDatabaseName(dbAlias);
-    myDB.setUserName(login);
-    myDB.setPassword(password);
-
-    bool status = myDB.open();
-    //qDebug() << myDB.lastError();
-
-    //clear list before new request
-    this->ui->listWidget->clear();
-
-    //request for contact titles
-    QSqlQuery *query = new QSqlQuery(myDB);
-    query->exec("select ID, Title from contacts");
-    while(query->next()) {
-        this->ui->listWidget->insertItem(i,query->value(1).toString());
-        //list.append(query->value(0).toInt());
-        vect.append({i,query->value(0).toInt(),query->value(1).toString()});
-        i++;
-    }
-
-    myDB.close();
-    return 1;
-}
-
+//now doesn't using
 void MainWindow::log() {
     int index = 0;
     //return text of selected item in list
@@ -66,21 +31,78 @@ void MainWindow::log() {
     index = ui->listWidget->currentRow();
 }
 
-int MainWindow::cl() {
-    //dbAccess conn;
-//    conn.initialize("localhost",3306,"qtTest","root","tbls8541");
-//    conn.dbOpen();
+int MainWindow::getTitles() {
+    ui->listWidget->clear();
     QList<QString> response = conn.getTitle();
     int i = response.size();
     for(int ii = 0; ii < i; ii++) {
-        ui->textEdit->append(response[ii]);
+        ui->listWidget->addItem(response[ii]);
     }
-    QList<base> body = conn.getBody();
-//    conn.dbClose();
+    ui->label->setText("total: " + QString::number(i) + " items");
+    ui->statusBar->showMessage("List refreshed.",5000);
     return 1;
 }
 
+int MainWindow::getQuery() {
+    QList<base> result;
+    int id;//this is id of list, not ID in table
+    id = ui->listWidget->currentRow();
+    result = conn.getBodyByID(id);
+    ui->lineEdit->setText(result.value(0).Title);
+    ui->textEdit->setText(result.value(0).Additional);
+    ui->textEdit_2->setText(result.value(0).ChangedFiles);
+}
+
 int MainWindow::addnew() {
-    conn.addNewContact("0", "hello", "good title", "some changed text", "NOW()", "NOW()");
+    QString title = gen();
+    conn.addNewContact("0", title, "good title", "some changed text");
+    for(int c = 0; c < 20000; c++) {
+        QCoreApplication::processEvents();
+        if(!ui->checkBox->isChecked()) {
+            qDebug() << "stoped or not enabled";
+            return 0;
+        }
+        title = gen();
+        conn.addNewContact("0", title, "good title", "some changed text");
+        //qDebug() << "iteration: " << c;
+        ui->statusBar->showMessage(QString::number(c),5000);
+    }
     return 1;
+}
+
+//for debug
+QString MainWindow::gen() {
+    QString result;
+    QList<QChar> tmp;
+    tmp.append('a');
+    tmp.append('b');
+    tmp.append('c');
+    tmp.append('d');
+    tmp.append('e');
+    tmp.append('f');
+    //tmp[] filled
+
+    qint8 i = 0;
+    qint8 size = tmp.size();
+    for(i = 0; i < size; i++) {
+        result.append(tmp[i]);
+    }
+    //result filled from tmp[]
+
+    quint8 random_f = 0, random_b;
+    QChar tmp_char = '0';
+    for(int i = 0; i <= size; i++) {
+        random_f = qrand() % 6;
+        random_b = qrand() % 6;
+        tmp_char = tmp[random_f];
+        tmp[random_f] = tmp[random_b];
+        tmp[random_b] = tmp_char;
+    }
+    result.clear();//clear from first fill
+    for(int i = 0; i < size; i++) {
+        result.append(tmp[i]);
+    }
+    //result filled with shuffled tmp[]
+
+    return result;
 }

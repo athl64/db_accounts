@@ -32,7 +32,8 @@ public:
     int dbClose();
     QList<QString> getTitle();
     QList<base> getBody();
-    int addNewContact(QString id, QString title, QString attr, QString changed, QString dateAdded, QString dateModifoed);
+    QList<base> getBodyByID(int id);
+    int addNewContact(QString id, QString title, QString attr, QString changed);
 };
 
 #endif // DBACCESS_H

@@ -53,10 +53,10 @@ QList<QString> dbAccess::getTitle()
     QList<QString> result;
     if(dbStatus) {
         request = QSqlQuery(db);
-        request.exec("select Title from contacts");
+        request.exec("select Title from contacts Order by Title ASC");
         while(request.next()) {
             result.append(request.value(0).toString());
-            qDebug() << "title request: " << request.value(0).toString();
+            //qDebug() << "title request: " << request.value(0).toString();
         }
         return result;
     } else {
@@ -83,7 +83,7 @@ QList<base> dbAccess::getBody() {
             added = request.value(4).toString();
             modified = request.value(5).toString();
             result.append( {id, title, attr, changed, added, modified} );
-            qDebug() << "body request: " << QString::number(id) + title + attr + changed + added + modified ;
+            //qDebug() << "body request: " << QString::number(id) + title + attr + changed + added + modified ;
         }
         return result;
     } else {
@@ -91,7 +91,34 @@ QList<base> dbAccess::getBody() {
     }
 }
 
-int dbAccess::addNewContact(QString id, QString title, QString attr, QString changed, QString dateAdded, QString dateModifoed) {
+QList<base> dbAccess::getBodyByID(int id = -1) {
+    QList<base> result;
+    int ID = 0;
+    QString title = "",
+            attr = "",
+            changed = "",
+            added = "",
+            modified = "";
+    if(dbStatus && (id >=0) ) {
+        request = QSqlQuery(db);
+        request.exec("select ID, Title, Attributes, changedFiles, dateAdded, dateModified from contacts where ID=\'" + QString::number(id) + "\'");
+        while(request.next()) {
+            ID = request.value(0).toInt();
+            title = request.value(1).toString();
+            attr = request.value(2).toString();
+            changed = request.value(3).toString();
+            added = request.value(4).toString();
+            modified = request.value(5).toString();
+            result.append( {ID, title, attr, changed, added, modified} );
+        }
+        //qDebug() << "got: "<< title << " + " << attr;
+        return result;
+    } else {
+        qDebug() << "Database doesn't open";
+    }
+}
+
+int dbAccess::addNewContact(QString id, QString title, QString attr, QString changed) {
     if(dbStatus) {
         request = QSqlQuery(db);
         int idNum = 0;
@@ -100,9 +127,12 @@ int dbAccess::addNewContact(QString id, QString title, QString attr, QString cha
             idStr = id;
         }
         idStr = "";//temp for debug
-        QString strVariables = "\"" + idStr + "\",\"" + title + "\",\"" + attr + "\",\"" + changed + "\",\"" + dateAdded + "\",\"" + dateModifoed + "\"";
+        //QString strVariables = "\"" + idStr + "\",\"" + title + "\",\"" + attr + "\",\"" + changed + "\",\"" + dateAdded + "\",\"" + dateModifoed + "\"";
+        QString strVariables = "\"" + idStr + "\",\"" + title + "\",\"" + attr + "\",\"" + changed + "\",now(),now()";
         request.exec("insert into contacts (ID,Title, Attributes, changedFiles, dateAdded, dateModified) values(" + strVariables + ")");
-        qDebug() << "error while insert" << db.lastError();
+        if(db.isOpenError()) {
+            qDebug() << "error while insert" << db.lastError();
+        }
         return 1;
     }
 }

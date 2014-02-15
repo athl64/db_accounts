@@ -22,31 +22,16 @@ public:
     ~MainWindow();
 
 public slots:
-    int simpleRead();
     void log();
-    int cl();
+    int getTitles();
+    int getQuery();
     int addnew();
+    QString gen();
 
 private:
     Ui::MainWindow *ui;
 
 private:
-    QString hostname;
-    QString dbAlias;
-    QString login;
-    QString password;
-    qint16 port;
-    //QVector<int> list;
-
-    //@i = number in QListTable
-    //@id = ID in table contacts
-    //@title = Title in table contacts
-    struct pair {
-        qint16 i;
-        qint16 id;
-        QString title;
-    };
-    QVector< pair > vect;
     dbAccess conn;
 };
 
