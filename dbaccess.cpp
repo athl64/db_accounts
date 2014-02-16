@@ -150,3 +150,19 @@ int dbAccess::addNewContact(QString id, QString title, QString attr, QString cha
         return 1;
     }
 }
+
+//shuffle QString argument, return 1, save to input argument strIN (pointer)
+int dbAccess::gen_random_str(QString &strIN) {
+    QChar tmp;
+    int res_size = strIN.size();
+    int rand_f = 0;
+    int rand_g = 0;
+    for(int i = 0; i < res_size; i++) {
+        rand_f = qrand() % res_size;
+        rand_g = qrand() % res_size;
+        tmp = strIN[rand_f];
+        strIN[rand_f] = strIN[rand_g];
+        strIN[rand_g] = tmp;
+    }
+    return 1;
+}

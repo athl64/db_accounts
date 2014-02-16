@@ -22,11 +22,9 @@ public:
     ~MainWindow();
 
 public slots:
-    void log();
     int getTitles();
     int getQuery();
     int addnew();
-    QString gen();
 
 private:
     Ui::MainWindow *ui;

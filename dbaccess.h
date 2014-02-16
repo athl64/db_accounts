@@ -35,6 +35,7 @@ public:
     QList<base> getBody();
     QList<base> getBodyByID(int id);
     int addNewContact(QString id, QString title, QString attr, QString changed);
+    int gen_random_str(QString &strIN);
 };
 
 #endif // DBACCESS_H

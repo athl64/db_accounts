@@ -22,15 +22,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//now doesn't using
-void MainWindow::log() {
-    int index = 0;
-    //return text of selected item in list
-    ui->listWidget->selectedItems()[0]->text();
-    //return index of selected item in list
-    index = ui->listWidget->currentRow();
-}
-
 int MainWindow::getTitles() {
     ui->listWidget->clear();
     Storage.clear();//fucking memory eater
@@ -58,55 +49,21 @@ int MainWindow::getQuery() {
 }
 
 int MainWindow::addnew() {
-    QString title = gen();
-    conn.addNewContact("0", title, "good title", "some changed text");
+    QString title = "1234567890",
+            descr = "doigj dxlfkbvjdfigjd xlksdfg bfxghdfhfcg",
+            changed = "fghfh ngyjf ghncfhd xrfgd xfdrtg dgfcg cfgd gdg cbgdgdf";
     for(int c = 0; c < 20000; c++) {
         QCoreApplication::processEvents();
         if(!ui->checkBox->isChecked()) {
             qDebug() << "stoped or not enabled";
             return 0;
         }
-        title = gen();
-        conn.addNewContact("0", title, "good title", "some changed text");
+        conn.gen_random_str(title);
+        conn.gen_random_str(descr);
+        conn.gen_random_str(changed);
+        conn.addNewContact("0", title, descr, changed);
         //qDebug() << "iteration: " << c;
         ui->statusBar->showMessage(QString::number(c),5000);
     }
     return 1;
-}
-
-//for debug
-QString MainWindow::gen() {
-    QString result;
-    QList<QChar> tmp;
-    tmp.append('a');
-    tmp.append('b');
-    tmp.append('c');
-    tmp.append('d');
-    tmp.append('e');
-    tmp.append('f');
-    //tmp[] filled
-
-    qint8 i = 0;
-    qint8 size = tmp.size();
-    for(i = 0; i < size; i++) {
-        result.append(tmp[i]);
-    }
-    //result filled from tmp[]
-
-    quint8 random_f = 0, random_b;
-    QChar tmp_char = '0';
-    for(int i = 0; i <= size; i++) {
-        random_f = qrand() % 6;
-        random_b = qrand() % 6;
-        tmp_char = tmp[random_f];
-        tmp[random_f] = tmp[random_b];
-        tmp[random_b] = tmp_char;
-    }
-    result.clear();//clear from first fill
-    for(int i = 0; i < size; i++) {
-        result.append(tmp[i]);
-    }
-    //result filled with shuffled tmp[]
-
-    return result;
 }
