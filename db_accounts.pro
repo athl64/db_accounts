@@ -23,3 +23,6 @@ HEADERS  += mainwindow.h \
     netaccess.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    res.qrc

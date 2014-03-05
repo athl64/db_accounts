@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_3,SIGNAL(clicked()),this,SLOT(addnew()));
     connect(ui->listWidget,SIGNAL(itemSelectionChanged()),this,SLOT(getQuery()));
 
+    trayInit();
+
     conn.initialize("localhost",3306,"qtTest","root","tbls8541");
     conn.dbOpen();
 }
@@ -66,4 +68,26 @@ int MainWindow::addnew() {
         ui->statusBar->showMessage(QString::number(c),5000);
     }
     return 1;
+}
+
+void MainWindow::trayInit() {
+    tray = new QSystemTrayIcon(this);
+    icon = QIcon(":/i/w.png");//icon puted in resources
+    tray->setIcon(icon);
+    tray->setVisible(true);
+    setWindowIcon(icon);//also set window icon
+    connect(tray,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(trayAct()));//on any click in tray
+    tray->show();
+    tray->setToolTip("my database system client");
+    trayState = true;//mainwindow is visible
+}
+
+void MainWindow::trayAct() {
+    if(trayState) {
+        this->hide();
+        trayState = false;
+    } else {
+        this->show();
+        trayState = true;
+    }
 }

@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QSqlError>
 #include "dbaccess.h"
+#include <qsystemtrayicon.h>
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +26,8 @@ public slots:
     int getTitles();
     int getQuery();
     int addnew();
+    void trayAct();
+    void trayInit();
 
 private:
     Ui::MainWindow *ui;
@@ -33,6 +36,9 @@ private:
     dbAccess conn;
     //key TID;
     QList<key> Storage;
+    QSystemTrayIcon *tray;
+    QIcon icon;
+    bool trayState;
 };
 
 #endif // MAINWINDOW_H
