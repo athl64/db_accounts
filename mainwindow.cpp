@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(getTitles()));
     connect(ui->pushButton_3,SIGNAL(clicked()),this,SLOT(addnew()));
     connect(ui->listWidget,SIGNAL(itemSelectionChanged()),this,SLOT(getQuery()));
+    connect(ui->pushButton,SIGNAL(clicked()),this, SLOT(test_network()));
 
     trayInit();
 
@@ -90,4 +91,9 @@ void MainWindow::trayAct() {
         this->show();
         trayState = true;
     }
+}
+
+void MainWindow::test_network() {
+    netaccess net;
+    net.init(80,"89.252.4.131");
 }

@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QSqlError>
 #include "dbaccess.h"
+#include "netaccess.h"
 #include <qsystemtrayicon.h>
 
 namespace Ui {
@@ -28,6 +29,7 @@ public slots:
     int addnew();
     void trayAct();
     void trayInit();
+    void test_network();
 
 private:
     Ui::MainWindow *ui;

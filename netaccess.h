@@ -2,9 +2,10 @@
 #define NETACCESS_H
 
 #include <QObject>
-#include <QtNetwork/QTcpSocket>
-#include <QtNetwork/QTcpServer>
-#include <QtNetwork/QtNetwork>
+#include <QTcpSocket>
+#include <QAbstractSocket>
+#include <QDebug>
+
 
 class netaccess : public QObject
 {
@@ -16,14 +17,14 @@ signals:
 
 public slots:
     int init(int port, QString host);
-    bool clientConnect();
-    bool clientDisconnect();
+    bool clientConnected();
+    bool clientDisconnected();
+    bool readyRead();
+    void writed(qint64 bytes);
 
 private:
     bool sockStatus;
-    QTcpSocket *sockNet;
-    QTcpServer *servNet;
-
+    QTcpSocket *sock;
 };
 
 #endif // NETACCESS_H

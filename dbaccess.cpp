@@ -31,7 +31,7 @@ int dbAccess::dbOpen()
 {
     if(db.open()) {
         dbStatus = true;
-        qDebug() << "connected";
+        qDebug() << "connected to DataBase";
         return 1;
     } else {
         qDebug() << db.lastError();
@@ -44,7 +44,7 @@ int dbAccess::dbClose()
 {
     db.close();
     dbStatus = false;
-    qDebug() << "disconnected";
+    qDebug() << "disconnected from DataBase";
     return 1;
 }
 
