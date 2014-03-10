@@ -3,9 +3,10 @@
 netaccess::netaccess(QObject *parent) :
     QObject(parent)
 {
-    qDebug() << "sock class initialised";
+    qDebug() << "netaccess class initialised";
 }
 
+//single socket - get request
 int netaccess::init(int port, QString host) {
     sock = new QTcpSocket(this);
 
@@ -46,4 +47,36 @@ bool netaccess::readyRead() {
 void netaccess::writed(qint64 bytes) {
     qDebug() << "writed bytes: " << bytes;
     sock->waitForReadyRead(3000);
+}
+
+//server
+void netaccess::servStart(int port) {
+    serv = new QTcpServer(this);
+
+    connect(serv,SIGNAL(newConnection()),this,SLOT(newConn()));
+
+    if(!serv->listen(QHostAddress::Any,port)) {
+        qDebug() << "server cannot start";
+    } else {
+        qDebug() << "server started to listen " << port << " port";
+    }
+    //not workng without it !!!
+    //serv->waitForNewConnection(3000);
+}
+
+void netaccess::servStop() {
+    qDebug() << "server stoped.";
+}
+
+void netaccess::newConn() {
+    qDebug() << "we have new connection!";
+
+    QTcpSocket *client = serv->nextPendingConnection();
+    qDebug() << "request from new client: " << client->readAll();
+    //client->waitForConnected(3000);
+    //client->waitForReadyRead(3000);
+    client->write("200 OK\r\n\r\n\r\n\r\n");
+    client->flush();
+    client->waitForBytesWritten(3000);
+    client->close();
 }

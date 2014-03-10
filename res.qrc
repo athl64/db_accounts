@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>i/w.png</file>
+        <file>i/cute.ico</file>
     </qresource>
 </RCC>

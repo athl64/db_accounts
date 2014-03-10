@@ -73,7 +73,7 @@ int MainWindow::addnew() {
 
 void MainWindow::trayInit() {
     tray = new QSystemTrayIcon(this);
-    icon = QIcon(":/i/w.png");//icon puted in resources
+    icon = QIcon(":/i/cute.ico");//icon puted in resources
     tray->setIcon(icon);
     tray->setVisible(true);
     setWindowIcon(icon);//also set window icon
@@ -95,5 +95,6 @@ void MainWindow::trayAct() {
 
 void MainWindow::test_network() {
     netaccess net;
-    net.init(80,"89.252.4.131");
+    //net.init(80,"89.252.4.131");
+    net.servStart(5551);
 }

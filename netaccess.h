@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include <QTcpServer>
 #include <QAbstractSocket>
 #include <QDebug>
 
@@ -16,15 +17,20 @@ public:
 signals:
 
 public slots:
+    //single connection - get request
     int init(int port, QString host);
     bool clientConnected();
     bool clientDisconnected();
     bool readyRead();
     void writed(qint64 bytes);
+    //for server listener
+    void servStart(int port);
+    void servStop();
+    void newConn();
 
 private:
-    bool sockStatus;
     QTcpSocket *sock;
+    QTcpServer *serv;
 };
 
 #endif // NETACCESS_H
