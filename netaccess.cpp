@@ -72,9 +72,8 @@ void netaccess::newConn() {
     qDebug() << "we have new connection!";
 
     QTcpSocket *client = serv->nextPendingConnection();
+    client->waitForReadyRead(3000);
     qDebug() << "request from new client: " << client->readAll();
-    //client->waitForConnected(3000);
-    //client->waitForReadyRead(3000);
     client->write("200 OK\r\n\r\n\r\n\r\n");
     client->flush();
     client->waitForBytesWritten(3000);

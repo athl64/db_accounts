@@ -1,6 +1,9 @@
 #ifndef NETACCESS_H
 #define NETACCESS_H
 
+//need to call initialize in main func, not by the buttons
+//else - it will not work in main thread
+
 #include <QObject>
 #include <QTcpSocket>
 #include <QTcpServer>
